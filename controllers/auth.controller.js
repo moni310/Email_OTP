@@ -5,7 +5,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
-const from = "+8881111020"
+const from = "+12055574079"
 
 
 
@@ -32,16 +32,16 @@ module.exports.signUpUser = async (req, res) => {
   const { Userdata, password } = req.body;
   let Existing 
   if(Userdata.includes("@")){
-    Existing = await User.findOne({Email:Userdata})
+    Existing = await User.findOne({Userdata:Userdata})
   }else{
     Existing = await User.findOne({mobile_Number:Userdata})
   }
 
   // Check if user already exist
   
-  if (Existing) {
-    return res.send('Already existing');
-  }
+  // if (Existing) {
+  //   return res.send('Already existing');
+  // }
 
   // create new user
   const newUser = await createUser(Userdata, password);
@@ -90,7 +90,7 @@ const createUser = async ( Userdata, password) => {
       return [false, 'Unable to sign you up'];
     }
     try {
-     sendSMS(`+91${mobile_Number}`,from,otpGenerated)
+     sendSMS(`+91${Userdata}`,from,otpGenerated)
       return [true, newUser];
     } catch (error) {
       return [false, 'Unable to sign up, Please try again later', error];
